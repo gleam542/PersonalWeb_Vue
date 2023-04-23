@@ -1,26 +1,44 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h2 class="mb-5">contacts me</h2>
+  <form @submit.prevent="submitForm">
+    <label for="name">Name:</label>
+    <input v-model="name" type="text" name="name" required><br><br>
+    <label for="email">Email:</label>
+    <input v-model="email" type="email" name="email" required><br><br>
+    <label for="message">Message:</label><br>
+    <textarea v-model="message" name="message" rows="5" cols="30" required></textarea><br><br>
+    <input type="submit" name="submit" value="Submit">
+  </form>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ContactService from './services/ContactService';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      name: '',
+      email: '',
+      message: ''
+    }
+  },
+  methods: {
+    submitForm() {
+      ContactService.submitForm(this.name, this.email, this.message)
+        .then(data => {
+          console.log(data);
+          // 清空表单数据
+          this.name = '';
+          this.email = '';
+          this.message = '';
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
